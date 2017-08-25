@@ -54,6 +54,9 @@ test('should use the indexPageTargetPattern value in the config object when supp
     });
 });
 
+test.todo('should include global javascript files in document head');
+test.todo('should include global css files in document head');
+
 // normalization of string to array
 
 test('should normalize a string value to an array', t => {
