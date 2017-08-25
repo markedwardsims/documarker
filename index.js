@@ -16,11 +16,14 @@ module.exports = class Documarker {
      * @param {String} config.indexPageTargetPattern  (Optional) The glob pattern used to find the markdown file for the index page
      */
     constructor(config) {
+        config = config || {};
         const defaultConfig = {
             outputDirectory: 'docs',
             targetPattern: '**/*.md',
             layoutTemplate: 'templates/_layout.ejs',
-            indexPageTargetPattern: 'index.md'
+            indexPageTargetPattern: 'index.md',
+            globalJS: [],
+            globalCSS: []
         };
         this.config = Object.assign({}, defaultConfig, config);
     }
@@ -46,6 +49,8 @@ module.exports = class Documarker {
     _buildPagesData(files) {
         const normalizeToArray = this._normailzeToArray;
         const indexPattern = this.config.indexPageTargetPattern;
+        const globalJS = this.config.globalJS;
+        const globalCSS = this.config.globalCSS;
         return files.map(function(file) {
             const defaultName = changeCase.paramCase( file.split('/').pop().split('.')[0] );
             const markdown = fs.readFileSync(file, 'utf8');
@@ -53,8 +58,8 @@ module.exports = class Documarker {
             const name = fm.attributes.name || defaultName;
             return {
                 name:       changeCase.titleCase(name),
-                css:        normalizeToArray(fm.attributes.css),
-                js:         normalizeToArray(fm.attributes.js),
+                css:        normalizeToArray(fm.attributes.css).concat(normalizeToArray(globalCSS)),
+                js:         normalizeToArray(fm.attributes.js).concat(normalizeToArray(globalJS)),
                 content:    styledown.parse(fm.body),
                 route:      changeCase.paramCase(name),
                 isIndex:    (file === indexPattern) // TODO: i'm not crazy about this because it's not needed in the view

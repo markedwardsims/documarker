@@ -10,7 +10,9 @@ test('should use default parameters if config object is not supplied', t => {
         outputDirectory: 'docs',
         targetPattern: '**/*.md',
         layoutTemplate: 'templates/_layout.ejs',
-        indexPageTargetPattern: 'index.md'
+        indexPageTargetPattern: 'index.md',
+        globalCSS: [],
+        globalJS: []
     });
 });
 
@@ -20,7 +22,9 @@ test('should use the outputDirectory value in the config object when supplied', 
         outputDirectory: 'foo',
         targetPattern: '**/*.md',
         layoutTemplate: 'templates/_layout.ejs',
-        indexPageTargetPattern: 'index.md'
+        indexPageTargetPattern: 'index.md',
+        globalCSS: [],
+        globalJS: []
     });
 });
 
@@ -30,7 +34,9 @@ test('should use the targetPattern value in the config object when supplied', t 
         outputDirectory: 'docs',
         targetPattern: 'bar',
         layoutTemplate: 'templates/_layout.ejs',
-        indexPageTargetPattern: 'index.md'
+        indexPageTargetPattern: 'index.md',
+        globalCSS: [],
+        globalJS: []
     });
 });
 
@@ -40,7 +46,9 @@ test('should use the layoutTemplate value in the config object when supplied', t
         outputDirectory: 'docs',
         targetPattern: '**/*.md',
         layoutTemplate: 'baz',
-        indexPageTargetPattern: 'index.md'
+        indexPageTargetPattern: 'index.md',
+        globalCSS: [],
+        globalJS: []
     });
 });
 
@@ -50,12 +58,11 @@ test('should use the indexPageTargetPattern value in the config object when supp
         outputDirectory: 'docs',
         targetPattern: '**/*.md',
         layoutTemplate: 'templates/_layout.ejs',
-        indexPageTargetPattern: 'bash'
+        indexPageTargetPattern: 'bash',
+        globalCSS: [],
+        globalJS: []
     });
 });
-
-test.todo('should include global javascript files in document head');
-test.todo('should include global css files in document head');
 
 // normalization of string to array
 
@@ -206,6 +213,96 @@ test('should set the isIndex flag to true in page context if the file pattern ma
     mockFs.restore();
 
 });
+
+test('should include a global javascript file in page context', t => {
+
+    mockFs({
+        'src/components': {
+            'fileOne.md': ''
+        }
+    });
+
+    const documarker = new Documarker({
+        targetPattern: 'src/**/*.md',
+        globalJS: 'foo'
+    });
+    const pagesData = documarker._buildPagesData([ 'src/components/fileOne.md' ]);
+
+    t.deepEqual(pagesData, [
+        { name: 'File One', css: [], js: ['foo'], content: '', route: 'file-one', isIndex: false }
+    ]);
+
+    mockFs.restore();
+
+});
+
+test('should include multiple global javascript files in page context', t => {
+
+    mockFs({
+        'src/components': {
+            'fileOne.md': ''
+        }
+    });
+
+    const documarker = new Documarker({
+        targetPattern: 'src/**/*.md',
+        globalJS: [ 'foo', 'bar' ]
+    });
+    const pagesData = documarker._buildPagesData([ 'src/components/fileOne.md' ]);
+
+    t.deepEqual(pagesData, [
+        { name: 'File One', css: [], js: ['foo', 'bar'], content: '', route: 'file-one', isIndex: false }
+    ]);
+
+    mockFs.restore();
+
+});
+
+test('should include a global CSS file in page context', t => {
+
+    mockFs({
+        'src/components': {
+            'fileOne.md': ''
+        }
+    });
+
+    const documarker = new Documarker({
+        targetPattern: 'src/**/*.md',
+        globalCSS: 'foo'
+    });
+    const pagesData = documarker._buildPagesData([ 'src/components/fileOne.md' ]);
+
+    t.deepEqual(pagesData, [
+        { name: 'File One', css: ['foo'], js: [], content: '', route: 'file-one', isIndex: false }
+    ]);
+
+    mockFs.restore();
+
+});
+
+test('should include multiple global CSS files in page context', t => {
+
+    mockFs({
+        'src/components': {
+            'fileOne.md': ''
+        }
+    });
+
+    const documarker = new Documarker({
+        targetPattern: 'src/**/*.md',
+        globalCSS: [ 'foo', 'bar' ]
+    });
+    const pagesData = documarker._buildPagesData([ 'src/components/fileOne.md' ]);
+
+    t.deepEqual(pagesData, [
+        { name: 'File One', css: ['foo', 'bar'], js: [], content: '', route: 'file-one', isIndex: false }
+    ]);
+
+    mockFs.restore();
+
+});
+
+test.todo('should include global css files in page context');
 
 // building the navigation array
 
