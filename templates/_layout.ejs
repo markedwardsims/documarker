@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+    <head>
+        <title><%- name %> | Deathmatch Components</title>
+
+        <link rel="stylesheet" href="https://cdn.rawgit.com/styledown/styledown/v1.0.2/data/styledown.css" />
+        <link rel="stylesheet" href="/dist/common/deathmatch.common.css" />
+        <script src="https://cdn.rawgit.com/styledown/styledown/v1.0.2/data/styledown.js"></script>
+
+        <% css.forEach(function(path) {  %>
+        <link rel="stylesheet" type="text/css" href="/<%- path %>">
+        <% }); %>
+
+        <% js.forEach(function(path) {  %>
+        <script type="text/javascript" src="/<%- path %>"></script>
+        <% }); %>
+
+    </head>
+
+    <body>
+
+        <aside class="sidebar">
+            <%- include('_sidebar', navigationData) %>
+        </aside>
+
+        <div role="main">
+            <%- content %>
+        </div>
+
+    </body>
+
+</html>

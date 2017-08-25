@@ -1,0 +1,26 @@
+{
+  "name": "documarker",
+  "version": "1.0.0",
+  "description": "A documentation/styleguide generator that leverages Styledown to create multiple pages rather than a single page.",
+  "main": "index.js",
+  "scripts": {
+    "test": "ava",
+    "coverage": "nyc --reporter=html --reporter=text ava"
+  },
+  "author": "Mark Edward Sims",
+  "license": "ISC",
+  "dependencies": {
+    "change-case": "^3.0.1",
+    "ejs": "^2.5.7",
+    "front-matter": "^2.1.2",
+    "fs": "0.0.1-security",
+    "globby": "^6.1.0",
+    "path": "^0.12.7"
+  },
+  "devDependencies": {
+    "ava": "^0.22.0",
+    "mock-fs-require-fix": "https://github.com/Slayer95/mock-fs",
+    "nyc": "^11.1.0",
+    "styledown": "^1.0.2"
+  }
+}
