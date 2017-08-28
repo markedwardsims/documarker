@@ -30,3 +30,7 @@
 .sg-list-item-reset {
     list-style-type: none;
 }
+
+.sg-canvas {
+    overflow: hidden;
+}

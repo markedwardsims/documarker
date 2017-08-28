@@ -308,7 +308,7 @@ test.todo('should include global css files in page context');
 
 // building the navigation array
 
-test('should build an array of navigation objects from the page context array', t => {
+test('should build an array of navigation objects from the page context array alphabetized ascending by name', t => {
 
     const pagesData = [
         { name: 'Foo', css: [], js: [], content: '', route: 'foo', isIndex: false },
@@ -321,10 +321,10 @@ test('should build an array of navigation objects from the page context array', 
     const navigationData = documarker._buildNavigationData(pagesData);
 
     t.deepEqual(navigationData, [
-        { name: 'Foo', href: '/foo' },
         { name: 'Bar', href: '/bar' },
-        { name: 'Baz', href: '/baz' },
         { name: 'Bash Bah', href: '/bash-bah' },
+        { name: 'Baz', href: '/baz' },
+        { name: 'Foo', href: '/foo' }
     ]);
 
 });
@@ -339,10 +339,10 @@ test('should add the navigation array to each page context', t => {
     ];
 
     const navigationData = [
-        { name: 'Foo', href: '/foo' },
         { name: 'Bar', href: '/bar' },
-        { name: 'Baz', href: '/baz' },
         { name: 'Bash Bah', href: '/bash-bah' },
+        { name: 'Baz', href: '/baz' },
+        { name: 'Foo', href: '/foo' }
     ];
 
     const documarker = new Documarker();
@@ -355,7 +355,9 @@ test('should add the navigation array to each page context', t => {
 
 });
 
-test.todo('should sort the navigation array ascending by name');
+test.todo('should properly link to the docs index page');
+
+test.todo('should make the docs index link first in the array');
 
 // rendering pages to html
 
@@ -388,7 +390,7 @@ test('should create the output directory if it doesn\'t already exist during bui
 
 });
 
-test.only('should create the site pages as index.html documents inside a named directory for clean urls');
+test.todo('should create the site pages as index.html documents inside a named directory for clean urls');
 
 test.todo('should create the site index page in the root output directory');
 
