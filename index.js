@@ -6,7 +6,7 @@ const path = require('path');
 const frontMatter = require('front-matter');
 const changeCase = require('change-case');
 
-module.exports = class Documarker {
+class Documarker {
 
     /**
      * The Documarker constructor function receives the config object and merges with the default config.
@@ -17,15 +17,7 @@ module.exports = class Documarker {
      */
     constructor(config) {
         config = config || {};
-        const defaultConfig = {
-            outputDirectory: 'docs',
-            targetPattern: '**/*.md',
-            layoutTemplate: 'templates/_layout.ejs',
-            indexPageTargetPattern: 'index.md',
-            globalJS: [],
-            globalCSS: []
-        };
-        this.config = Object.assign({}, defaultConfig, config);
+        this.config = Object.assign({}, this.defaultConfig, config);
     }
 
     /**
@@ -106,7 +98,7 @@ module.exports = class Documarker {
      */
     _renderPage(context) {
         const outputDirectory = this.config.outputDirectory;
-        const layoutTemplate = path.resolve(__dirname, this.config.layoutTemplate);
+        const layoutTemplate = (this.defaultConfig.layoutTemplate === this.config.layoutTemplate) ? path.resolve( __dirname, this.config.layoutTemplate) : path.resolve( this.config.layoutTemplate);
         ejs.renderFile(layoutTemplate, context, {}, function(err, str) {
             let newDir;
             if(context.isIndex) {
@@ -153,3 +145,14 @@ module.exports = class Documarker {
     }
 
 };
+
+Documarker.prototype.defaultConfig = {
+    outputDirectory: 'docs',
+    targetPattern: '**/*.md',
+    layoutTemplate: 'templates/_layout.ejs',
+    indexPageTargetPattern: 'index.md',
+    globalJS: [],
+    globalCSS: []
+};
+
+module.exports = Documarker;

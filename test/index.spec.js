@@ -1,6 +1,8 @@
 import test from 'ava';
 import Documarker from '../index.js';
 import mockFs from 'mock-fs-require-fix';
+import fs from 'fs';
+import path from 'path';
 
 // parameters and default config
 
@@ -356,10 +358,35 @@ test('should add the navigation array to each page context', t => {
 // rendering pages to html
 
 test.todo('should render a page');
+
 test.todo('should render each page from the array of page context objects');
 
 // output
 
-test.todo('should create the output directory if it doesn\'t already exist during build');
-test.todo('should create the site pages as index.html documents inside a named directory for clean urls');
+test('should create the output directory if it doesn\'t already exist during build', t => {
+
+    mockFs({
+        'src/components': {
+            'fileOne.md': ''
+        }
+    });
+
+    const documarker = new Documarker({
+        outputDirectory: 'foo',
+        targetPattern: 'src/**/*.md'
+    });
+
+    documarker.build();
+
+    const outputDirectory = path.resolve('foo');
+
+    t.true(fs.existsSync(outputDirectory));
+
+    mockFs.restore();
+
+});
+
+test.only('should create the site pages as index.html documents inside a named directory for clean urls');
+
 test.todo('should create the site index page in the root output directory');
+
