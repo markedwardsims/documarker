@@ -4,6 +4,7 @@
         <title><%- name %> | Deathmatch Components</title>
 
         <link rel="stylesheet" href="https://cdn.rawgit.com/styledown/styledown/v1.0.2/data/styledown.css" />
+        <link rel="stylesheet" href="https://cdn.rawgit.com/markedwardsims/documarker/5ab8755c/css/documarker.css" />
         <script src="https://cdn.rawgit.com/styledown/styledown/v1.0.2/data/styledown.js"></script>
 
         <% css.forEach(function(path) {  %>
@@ -16,13 +17,13 @@
 
     </head>
 
-    <body>
+    <body class="sg sg-page">
 
-        <aside class="sidebar">
+        <aside class="sg-sidebar">
             <%- include('_sidebar', navigationData) %>
         </aside>
 
-        <div role="main">
+        <div class="sg-main" role="main">
             <%- content %>
         </div>
 
