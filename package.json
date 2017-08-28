@@ -1,6 +1,6 @@
 {
   "name": "documarker",
-  "version": "1.0.0",
+  "version": "0.1.1",
   "description": "A documentation/styleguide generator that leverages Styledown to create multiple pages rather than a single page.",
   "main": "index.js",
   "scripts": {

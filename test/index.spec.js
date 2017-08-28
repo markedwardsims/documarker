@@ -355,6 +355,8 @@ test('should add the navigation array to each page context', t => {
 
 });
 
+test.todo('should sort the navigation array ascending by name');
+
 // rendering pages to html
 
 test.todo('should render a page');

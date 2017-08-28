@@ -1,3 +1,7 @@
+* {
+    box-sizing: border-box;
+}
+
 .sg-sidebar {
     width: 200px;
     float: left;
@@ -9,7 +13,7 @@
 }
 
 .sg-main {
-    width: calc(100% - 200px);
+    width: calc(100% - 400px);
     float: left;
 }
 
