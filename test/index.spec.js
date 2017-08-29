@@ -100,7 +100,7 @@ test('should use a default name if name parameter does not exist in markdown fro
     const pagesData = documarker._buildPagesData([ 'src/components/file1.md' ]);
 
     t.deepEqual(pagesData, [
-        { name: 'File1', css: [], js: [], content: '', route: 'file1', isIndex: false },
+        { name: 'File1', css: [], js: [], content: '', route: 'file1', group: 'Common', isIndex: false },
     ]);
 
     mockFs.restore();
@@ -123,7 +123,7 @@ test('should use the name parameter in the markdown front matter for the route v
     const pagesData = documarker._buildPagesData([ 'src/components/fileOne.md' ]);
 
     t.deepEqual(pagesData, [
-        { name: 'Foo Bar', css: [], js: [], content: '', route: 'foo-bar', isIndex: false },
+        { name: 'Foo Bar', css: [], js: [], content: '', route: 'foo-bar', group: 'Common', isIndex: false },
     ]);
 
     mockFs.restore();
@@ -153,8 +153,8 @@ test('should include javascript file(s) path in page context if included in the 
     const pagesData = documarker._buildPagesData([ 'src/components/fileOne.md', 'src/components/fileTwo.md' ]);
 
     t.deepEqual(pagesData, [
-        { name: 'File One', css: [], js: ['foo'], content: '', route: 'file-one', isIndex: false },
-        { name: 'File Two', css: [], js: ['bar', 'baz'], content: '', route: 'file-two', isIndex: false },
+        { name: 'File One', css: [], js: ['foo'], content: '', route: 'file-one', group: 'Common', isIndex: false },
+        { name: 'File Two', css: [], js: ['bar', 'baz'], content: '', route: 'file-two', group: 'Common', isIndex: false },
     ]);
 
     mockFs.restore();
@@ -184,8 +184,8 @@ test('should include css file(s) path in page context if included in the markdow
     const pagesData = documarker._buildPagesData([ 'src/components/fileOne.md', 'src/components/fileTwo.md' ]);
 
     t.deepEqual(pagesData, [
-        { name: 'File One', css: ['foo'], js: [], content: '', route: 'file-one', isIndex: false },
-        { name: 'File Two', css: ['bar', 'baz'], js: [], content: '', route: 'file-two', isIndex: false },
+        { name: 'File One', css: ['foo'], js: [], content: '', route: 'file-one', group: 'Common', isIndex: false },
+        { name: 'File Two', css: ['bar', 'baz'], js: [], content: '', route: 'file-two', group: 'Common', isIndex: false },
     ]);
 
     mockFs.restore();
@@ -208,8 +208,8 @@ test('should set the isIndex flag to true in page context if the file pattern ma
     const pagesData = documarker._buildPagesData([ 'src/components/fileOne.md', 'src/components/fileTwo.md' ]);
 
     t.deepEqual(pagesData, [
-        { name: 'File One', css: [], js: [], content: '', route: 'file-one', isIndex: false },
-        { name: 'File Two', css: [], js: [], content: '', route: 'file-two', isIndex: true },
+        { name: 'File One', css: [], js: [], content: '', route: 'file-one', group: 'Common', isIndex: false },
+        { name: 'File Two', css: [], js: [], content: '', route: 'file-two', group: 'Common', isIndex: true },
     ]);
 
     mockFs.restore();
@@ -231,7 +231,7 @@ test('should include a global javascript file in page context', t => {
     const pagesData = documarker._buildPagesData([ 'src/components/fileOne.md' ]);
 
     t.deepEqual(pagesData, [
-        { name: 'File One', css: [], js: ['foo'], content: '', route: 'file-one', isIndex: false }
+        { name: 'File One', css: [], js: ['foo'], content: '', route: 'file-one', group: 'Common', isIndex: false }
     ]);
 
     mockFs.restore();
@@ -253,7 +253,7 @@ test('should include multiple global javascript files in page context', t => {
     const pagesData = documarker._buildPagesData([ 'src/components/fileOne.md' ]);
 
     t.deepEqual(pagesData, [
-        { name: 'File One', css: [], js: ['foo', 'bar'], content: '', route: 'file-one', isIndex: false }
+        { name: 'File One', css: [], js: ['foo', 'bar'], content: '', route: 'file-one', group: 'Common', isIndex: false }
     ]);
 
     mockFs.restore();
@@ -275,7 +275,7 @@ test('should include a global CSS file in page context', t => {
     const pagesData = documarker._buildPagesData([ 'src/components/fileOne.md' ]);
 
     t.deepEqual(pagesData, [
-        { name: 'File One', css: ['foo'], js: [], content: '', route: 'file-one', isIndex: false }
+        { name: 'File One', css: ['foo'], js: [], content: '', route: 'file-one', group: 'Common', isIndex: false }
     ]);
 
     mockFs.restore();
@@ -297,7 +297,7 @@ test('should include multiple global CSS files in page context', t => {
     const pagesData = documarker._buildPagesData([ 'src/components/fileOne.md' ]);
 
     t.deepEqual(pagesData, [
-        { name: 'File One', css: ['foo', 'bar'], js: [], content: '', route: 'file-one', isIndex: false }
+        { name: 'File One', css: ['foo', 'bar'], js: [], content: '', route: 'file-one', group: 'Common', isIndex: false }
     ]);
 
     mockFs.restore();
@@ -308,41 +308,65 @@ test.todo('should include global css files in page context');
 
 // building the navigation array
 
-test('should build an array of navigation objects from the page context array', t => {
+test('should add pages without a specified group to the Common group', t => {
 
     const pagesData = [
-        { name: 'Foo', css: [], js: [], content: '', route: 'foo', isIndex: false },
-        { name: 'Bar', css: [], js: [], content: '', route: 'bar', isIndex: false },
-        { name: 'Baz', css: [], js: [], content: '', route: 'baz', isIndex: false },
-        { name: 'Bash Bah', css: [], js: [], content: '', route: 'bash-bah', isIndex: false },
+        { name: 'Foo', css: [], js: [], content: '', route: 'foo', group: 'Common', isIndex: false },
+        { name: 'Bar', css: [], js: [], content: '', route: 'bar', group: 'Common', isIndex: false },
+        { name: 'Baz', css: [], js: [], content: '', route: 'baz', group: 'Common', isIndex: false },
+        { name: 'Bash Bah', css: [], js: [], content: '', route: 'bash-bah', group: 'Common', isIndex: false },
     ];
 
     const documarker = new Documarker();
     const navigationData = documarker._buildNavigationData(pagesData);
 
     t.deepEqual(navigationData, [
-        { name: 'Foo', href: '/foo' },
-        { name: 'Bar', href: '/bar' },
-        { name: 'Baz', href: '/baz' },
-        { name: 'Bash Bah', href: '/bash-bah' },
+        {
+            name: 'Common',
+            items: [
+                { name: 'Bar', href: '/bar' },
+                { name: 'Bash Bah', href: '/bash-bah' },
+                { name: 'Baz', href: '/baz' },
+                { name: 'Foo', href: '/foo' }
+            ]
+        }
     ]);
 
 });
 
-test('should add the navigation array to each page context', t => {
+test('should build and add the grouped and ordered navigation array to each page context', t => {
 
     const pagesData = [
-        { name: 'Foo', css: [], js: [], content: '', route: 'foo', isIndex: false },
-        { name: 'Bar', css: [], js: [], content: '', route: 'bar', isIndex: false },
-        { name: 'Baz', css: [], js: [], content: '', route: 'baz', isIndex: false },
-        { name: 'Bash Bah', css: [], js: [], content: '', route: 'bash-bah', isIndex: false },
+        { name: 'Foo', css: [], js: [], content: '', route: 'foo', group: 'Tim', isIndex: false },
+        { name: 'Bar', css: [], js: [], content: '', route: 'bar', group: 'Buck', isIndex: false },
+        { name: 'Zoo', css: [], js: [], content: '', route: 'zoo', group: 'Buck', isIndex: false },
+        { name: 'Goo', css: [], js: [], content: '', route: 'goo', group: 'Two', isIndex: false },
+        { name: 'Baz', css: [], js: [], content: '', route: 'baz', group: 'Tim', isIndex: false },
+        { name: 'Tah', css: [], js: [], content: '', route: 'tah', group: 'Two', isIndex: false },
     ];
 
     const navigationData = [
-        { name: 'Foo', href: '/foo' },
-        { name: 'Bar', href: '/bar' },
-        { name: 'Baz', href: '/baz' },
-        { name: 'Bash Bah', href: '/bash-bah' },
+        {
+            name: 'Buck',
+            items: [
+                { name: 'Bar', href: '/bar' },
+                { name: 'Zoo', href: '/zoo' }
+            ]
+        },
+        {
+            name: 'Tim',
+            items: [
+                { name: 'Baz', href: '/baz' },
+                { name: 'Foo', href: '/foo' }
+            ]
+        },
+        {
+            name: 'Two',
+            items: [
+                { name: 'Goo', href: '/goo' },
+                { name: 'Tah', href: '/tah' }
+            ]
+        },
     ];
 
     const documarker = new Documarker();
@@ -355,7 +379,9 @@ test('should add the navigation array to each page context', t => {
 
 });
 
-test.todo('should sort the navigation array ascending by name');
+test.todo('should properly link to the docs index page');
+
+test.todo('should make the docs index link first in the array');
 
 // rendering pages to html
 
@@ -388,7 +414,7 @@ test('should create the output directory if it doesn\'t already exist during bui
 
 });
 
-test.only('should create the site pages as index.html documents inside a named directory for clean urls');
+test.todo('should create the site pages as index.html documents inside a named directory for clean urls');
 
 test.todo('should create the site index page in the root output directory');
 
