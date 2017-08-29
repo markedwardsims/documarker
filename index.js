@@ -54,6 +54,7 @@ class Documarker {
                 js:         normalizeToArray(fm.attributes.js).concat(normalizeToArray(globalJS)),
                 content:    styledown.parse(fm.body),
                 route:      changeCase.paramCase(name),
+                group:      fm.attributes.group || 'Common',
                 isIndex:    (file === indexPattern) // TODO: i'm not crazy about this because it's not needed in the view
                                                     // but by the time we need to either create or not create the folder
                                                     // for the index.html file we only have the page context available
@@ -68,16 +69,33 @@ class Documarker {
      * @private
      */
     _buildNavigationData(pagesData) {
-        return pagesData.map(function(page){
-            return  {
-                name: page.name,
-                href: '/' + page.route
-            };
-        }).sort(function(a, b){
-            if(a.name < b.name) { return -1; }
-            if(a.name > b.name) { return 1; }
-            return 0;
-        });
+
+        const groupedObj = pagesData.reduce(function(accumulator, current) {
+            (accumulator[current.group] = accumulator[current.group] || []).push(current);
+            return accumulator;
+        }, {});
+
+        return Object.keys(groupedObj)
+            .sort(function(a, b){
+                if(a < b) { return -1; }
+                if(a > b) { return 1; }
+                return 0;
+            })
+            .map(function(group) {
+                return {
+                    name: group,
+                    items: groupedObj[group].map(function(page){
+                        return  {
+                            name: page.name,
+                            href: '/' + page.route
+                        };
+                    }).sort(function(a, b){
+                        if(a.name < b.name) { return -1; }
+                        if(a.name > b.name) { return 1; }
+                        return 0;
+                    })
+                }
+            });
     }
 
     /**
