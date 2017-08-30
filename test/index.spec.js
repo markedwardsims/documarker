@@ -379,9 +379,25 @@ test('should build and add the grouped and ordered navigation array to each page
 
 });
 
-test.todo('should properly link to the docs index page');
+test('should properly link to the docs index page and put it in an empty group so it\'s first in the list', t => {
 
-test.todo('should make the docs index link first in the array');
+    const pagesData = [
+        { name: 'Foo', css: [], js: [], content: '', route: 'foo', group: 'Common', isIndex: true }
+    ];
+
+    const documarker = new Documarker();
+    const navigationData = documarker._buildNavigationData(pagesData);
+
+    t.deepEqual(navigationData, [
+        {
+            name: '',
+            items: [
+                { name: 'Foo', href: '/' },
+            ]
+        }
+    ]);
+
+});
 
 // rendering pages to html
 

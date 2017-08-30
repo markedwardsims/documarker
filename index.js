@@ -70,12 +70,23 @@ class Documarker {
      */
     _buildNavigationData(pagesData) {
 
-        const groupedObj = pagesData.reduce(function(accumulator, current) {
-            (accumulator[current.group] = accumulator[current.group] || []).push(current);
-            return accumulator;
-        }, {});
+        const groupedObj = pagesData
+            .map(function(pageContext){
+                if(pageContext.isIndex) {
+                    pageContext.route = '';
+                    pageContext.group = '';
+                }
+                return pageContext;
+            })
+            .reduce(function(accumulator, current) {
+                (accumulator[current.group] = accumulator[current.group] || []).push(current);
+                return accumulator;
+            }, {});
 
         return Object.keys(groupedObj)
+            .map(function(group){
+                return group;
+            })
             .sort(function(a, b){
                 if(a < b) { return -1; }
                 if(a > b) { return 1; }

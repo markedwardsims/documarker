@@ -1,6 +1,6 @@
 <% navigationData.forEach(function(group){ %>
 <div class="sg-sidebar__group">
-    <h3 class="sg-sidebar__title"><%= group.name %></h3>
+    <% if(group.name) { %><h3 class="sg-sidebar__title"><%= group.name %></h3><% } %>
     <ul>
         <% group.items.forEach(function(item){ %>
         <li class="sg-list-item-reset sg-sidebar__anchor">
